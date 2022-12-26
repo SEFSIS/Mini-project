@@ -1,10 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .firstPage{
+            width:100%;
+            height:100%;
+            background: cornflowerblue;
+            display:flex;
+            flex-wrap:wrap;
+        }
+        .us{
+            width:50%;
+            height:250px;
+            border: solid 5px white;
+            color:white;
+            font-size: 50px;
+            box-sizing:border-box;
+            padding: 10px 250px ;
+        }
+
+        .link {
+            color: midnightblue;
+            display: flex;
+            align-items: flex-end;
+            font-size: 30px;
+        }
+    </style>
+
 </head>
 <body>
-$END$
+<div class="firstPage" id="wrap"></div>
+<script>
+    let firstPage=document.querySelector('.firstPage');
+    fetch(`https://jsonplaceholder.typicode.com/users`)
+        .then((response) => response.json())
+        .then(users => {
+            let wrap =document.getElementById('wrap');
+            for (const user of users) {
+                let div = document.createElement('div');
+                div.innerText = ` ${user.id} ${user.name}`;
+                div.classList.add('us');
+                let a = document.createElement('a');
+                a.href = `user-details.html?id=${user.id}`;
+                a.innerText = ' Detailed Information'
+                a.classList.add('link');
+                div.appendChild( a);
+                document.body.appendChild( div);
+                wrap.append(div);
+                document.body.appendChild(wrap);
+            }
+        });
+
+</script>
 </body>
 </html>

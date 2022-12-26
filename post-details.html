@@ -1,10 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .h1{
+      font-size: 50px;
+      display: flex;
+      justify-content: center;
+      color: white;
+      background: cornflowerblue;
+
+    }
+    .wrap{
+      display:flex;
+      justify-content: space-between;
+
+    }
+    .wrap0{
+      width:1000px;
+      height:530px;
+      color:cornflowerblue;
+      margin-left: 450px;
+      font-size: 40px;
+
+
+    }
+    .comInfo {
+      width: 16vw;
+      height:250px;
+      font-size: 20px;
+      color:white;
+      background: cornflowerblue;
+
+    }
+
+  </style>
 </head>
 <body>
-$END$
+<h1 class="h1">Information about the post</h1>
+<script>
+  let url = new URL(location.href);
+  let id = url.searchParams.get('data');
+  fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+          .then(response => response.json())
+          .then(post => {
+            let wrap0 = document.createElement('div');
+            wrap0.classList.add('wrap0');
+            for (const postKey in post) {
+              let postdiv = document.createElement('div');
+              postdiv.innerText = `${postKey}: ${post[postKey]}`;
+              postdiv.classList.add('comInf');
+              wrap0.append(postdiv);
+              document.body.append(wrap0);
+            }
+
+          });
+  fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
+          .then(response => response.json())
+          .then(comment => {
+            let wrap = document.createElement('div');
+            wrap.classList.add('wrap');
+            for (const commentElement of comment) {
+              let commentdiv = document.createElement('div');
+              commentdiv.innerText = `${commentElement.email}: ${commentElement.body}`;
+              commentdiv.classList.add('comInfo');
+              wrap.append(commentdiv);
+              document.body.append(wrap);
+
+            }
+          });
+</script>
 </body>
 </html>

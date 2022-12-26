@@ -1,10 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .post-box {
+      width: 16vw;
+      height:250px;
+      border: solid 5px cornflowerblue;
+      font-size: 20px;
+      color:cornflowerblue;
+    }
+
+    .wrap{
+      display:flex;
+      justify-content: space-evenly;
+      flex-wrap:wrap;
+      row-gap:10px;
+    }
+    .btn {
+      height: 100px;
+      width: 100%;
+      background: cornflowerblue;
+      border: solid 10px white;
+      color: midnightblue;
+      font-size: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .h1 {
+      font-size: 50px;
+      display: flex;
+      justify-content: center;
+      color: cornflowerblue;
+    }
+
+    .target {
+      width: 100%;
+      height: 520px;
+      background: cornflowerblue;
+      font-size: 30px;
+      color: white;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
-$END$
+<h1 class="h1"> Information about the user</h1>
+<div class="target" id="wraps"></div>
+<script>
+  let url = new URL(location.href);
+  let id = url.searchParams.get("id");
+  fetch(`https://jsonplaceholder.typicode.com/users/` + id)
+          .then(resp => resp.json())
+          .then(value => {
+            let wrap = document.getElementById('wraps');
+            for (const user in value) {
+              let userd = document.createElement('div');
+              if (typeof value[user] !== 'object') {
+                userd.innerText = `${user} : ${value[user]}`;
+              } else {
+                userd.innerText =` ${user}:`
+                for (const userdKey in value[user]) {
+                  let userInnerDiv = document.createElement('div');
+                  if (typeof value[user][userdKey] !== 'object') {
+                    userInnerDiv.innerText = `${userdKey}: ${value[user][userdKey]}`
+                  } else {
+                    userInnerDiv.innerText = `${userdKey}`;
+                    for (const userInnerDivKey in value[user][userdKey]) {
+                      let elem = document.createElement('div');
+                      if (typeof value[user][userdKey][userInnerDivKey] !== 'object') {
+                        elem.innerText =` ${userInnerDivKey} : ${value[user][userdKey][userInnerDivKey]}`;
+                      }
+                      userInnerDiv.append(elem);
+                    }
+                  }
+                  userd.append(userInnerDiv);
+                }
+              }
+              document.body.append(userd);
+              wrap.append(userd);
+              document.body.appendChild(wrap);
+
+            }
+
+            let buttonDIv = document.createElement('div')
+            let btn = document.createElement('button')
+            btn.innerText = 'post of current user'
+            buttonDIv.appendChild(btn)
+            btn.classList.add('btn')
+            buttonDIv.classList.add('buttonDiv')
+            document.body.appendChild(buttonDIv)
+            btn.onclick = function () {
+              fetch(`https://jsonplaceholder.typicode.com/users/${id}/posts`)
+                      .then(value => value.json())
+                      .then(posts => {
+                        let wrap = document.createElement('div');
+                        wrap.classList.add('wrap');
+                        for (const post of posts) {
+                          let div = document.createElement('div');
+                          div.classList.add('post-box')
+                          let h2 = document.createElement('h2');
+                          let a = document.createElement('a');
+                          a.innerText =` ${post.title}`;
+                          a.href = `post-details.html?data=${post.id}`;
+                          h2.appendChild(a);
+                          div.append(h2);
+                          div.appendChild(h2);
+                          wrap.append(div);
+                          document.body.appendChild(wrap);
+                        }
+                      })
+            }
+          });
+</script>
+
+
+</script>
 </body>
 </html>
